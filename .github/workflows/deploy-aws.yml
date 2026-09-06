@@ -48,31 +48,6 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v6
 
-      - name: Show non-secret OIDC trust claims
-        shell: bash
-        run: |
-          set -euo pipefail
-          OIDC_TOKEN="$(curl --fail --silent --show-error \
-            --header "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-            "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=sts.amazonaws.com" \
-            | jq --raw-output '.value')"
-          export OIDC_TOKEN
-          node -e '
-            const payload = JSON.parse(
-              Buffer.from(process.env.OIDC_TOKEN.split(".")[1], "base64url").toString(),
-            );
-            const visible = {
-              aud: payload.aud,
-              sub: payload.sub,
-              repository: payload.repository,
-              repository_id: payload.repository_id,
-              repository_owner: payload.repository_owner,
-              repository_owner_id: payload.repository_owner_id,
-              environment: payload.environment,
-            };
-            console.log(JSON.stringify(visible, null, 2));
-          '
-
       - name: Configure AWS credentials with OIDC
         uses: aws-actions/configure-aws-credentials@v6.2.3
         with:

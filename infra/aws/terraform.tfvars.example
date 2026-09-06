@@ -1,6 +1,9 @@
-aws_region       = "us-east-1"
-github_owner     = "Ca15y"
-github_repository = "jobbr"
+aws_region           = "us-east-1"
+github_owner         = "Ca15y"
+github_owner_id      = "170892886"
+github_repository    = "jobbr"
+github_repository_id = "1358879694"
+github_environment   = "aws-production"
 
 # Leave empty for the first apply. Set this after pushing the first image.
 image_uri = ""

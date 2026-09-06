@@ -16,10 +16,28 @@ variable "github_owner" {
   default     = "Ca15y"
 }
 
+variable "github_owner_id" {
+  description = "Immutable numeric GitHub ID for the repository owner."
+  type        = string
+  default     = "170892886"
+}
+
 variable "github_repository" {
   description = "GitHub repository allowed to assume the deployment role."
   type        = string
   default     = "jobbr"
+}
+
+variable "github_repository_id" {
+  description = "Immutable numeric GitHub repository ID included in new OIDC subject claims."
+  type        = string
+  default     = "1358879694"
+}
+
+variable "github_environment" {
+  description = "GitHub Actions environment allowed to deploy to AWS."
+  type        = string
+  default     = "aws-production"
 }
 
 variable "existing_github_oidc_provider_arn" {

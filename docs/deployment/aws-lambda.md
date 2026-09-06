@@ -40,6 +40,7 @@ Edit the ignored `infra/aws/terraform.tfvars` file:
 - Copy the Supabase URL and publishable key from `.env.local`.
 - Leave `image_uri = ""` for the first apply.
 - Leave Adzuna values empty unless you use that feed.
+- If you fork Jobbr, replace the GitHub owner/repository names and numeric IDs. Find the IDs with `gh api user --jq .id` and `gh api repos/OWNER/REPOSITORY --jq .id`.
 
 Do not commit `terraform.tfvars` or any `*.tfstate` file. Terraform state contains environment values.
 
@@ -54,6 +55,8 @@ terraform -chdir=infra/aws apply bootstrap.tfplan
 ```
 
 The first apply deliberately creates the registry and IAM resources but no Lambda function, because Lambda requires an image that already exists in ECR.
+
+Repositories created under GitHub's newer OIDC format include immutable owner and repository IDs in the token subject. Terraform binds the AWS role to those IDs and the `aws-production` environment, preventing a renamed or recreated repository from inheriting deployment access.
 
 If AWS reports that the GitHub OIDC provider already exists, find that provider's ARN and set `existing_github_oidc_provider_arn` in `terraform.tfvars`; do not create a duplicate provider.
 

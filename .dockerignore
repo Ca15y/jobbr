@@ -1,0 +1,13 @@
+.git
+.github
+.next
+.terraform
+node_modules
+npm-debug.log*
+.env*
+!.env.example
+Dockerfile*
+docs
+infra
+*.md
+supabase

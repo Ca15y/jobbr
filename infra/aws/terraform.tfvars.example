@@ -7,7 +7,6 @@ image_uri = ""
 
 next_public_supabase_url             = "https://your-project.supabase.co"
 next_public_supabase_publishable_key = "your-publishable-key"
-next_server_actions_encryption_key   = "generate-with-openssl-rand-base64-32"
 
 # Optional
 adzuna_app_id    = ""

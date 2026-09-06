@@ -4,18 +4,27 @@ locals {
   github_oidc_provider_arn = var.existing_github_oidc_provider_arn != "" ? var.existing_github_oidc_provider_arn : aws_iam_openid_connect_provider.github[0].arn
   lambda_function_arn      = "arn:aws:lambda:${var.aws_region}:${data.aws_caller_identity.current.account_id}:function:${var.app_name}"
 
-  lambda_environment = {
-    AWS_LWA_INVOKE_MODE                  = "response_stream"
-    AWS_LWA_PORT                         = "8080"
-    AWS_LWA_READINESS_CHECK_PATH         = "/login"
-    NEXT_TELEMETRY_DISABLED              = "1"
-    NEXT_PUBLIC_SUPABASE_URL             = var.next_public_supabase_url
-    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY = var.next_public_supabase_publishable_key
-    NEXT_SERVER_ACTIONS_ENCRYPTION_KEY   = var.next_server_actions_encryption_key
-    ADZUNA_APP_ID                        = var.adzuna_app_id
-    ADZUNA_APP_KEY                       = var.adzuna_app_key
-    ADZUNA_COUNTRIES                     = var.adzuna_countries
-  }
+  lambda_environment = merge(
+    {
+      AWS_LWA_INVOKE_MODE          = "response_stream"
+      AWS_LWA_PORT                 = "8080"
+      AWS_LWA_READINESS_CHECK_PATH = "/login"
+      NEXT_TELEMETRY_DISABLED      = "1"
+      ADZUNA_COUNTRIES             = var.adzuna_countries
+    },
+    var.next_public_supabase_url != "" ? {
+      NEXT_PUBLIC_SUPABASE_URL = var.next_public_supabase_url
+    } : {},
+    var.next_public_supabase_publishable_key != "" ? {
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY = var.next_public_supabase_publishable_key
+    } : {},
+    var.adzuna_app_id != "" ? {
+      ADZUNA_APP_ID = var.adzuna_app_id
+    } : {},
+    var.adzuna_app_key != "" ? {
+      ADZUNA_APP_KEY = var.adzuna_app_key
+    } : {}
+  )
 }
 
 resource "aws_ecr_repository" "app" {

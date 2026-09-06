@@ -47,13 +47,6 @@ variable "next_public_supabase_publishable_key" {
   default     = ""
 }
 
-variable "next_server_actions_encryption_key" {
-  description = "Stable 32-byte base64 key shared by rolling Next.js deployments."
-  type        = string
-  sensitive   = true
-  default     = ""
-}
-
 variable "adzuna_app_id" {
   description = "Optional Adzuna application ID."
   type        = string

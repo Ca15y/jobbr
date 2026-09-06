@@ -19,7 +19,6 @@ In the Vercel project, open **Settings → Environment Variables** and add these
 | --- | --- | --- |
 | `NEXT_PUBLIC_SUPABASE_URL` | Yes | Supabase **Project Settings → API** |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Yes | Supabase **Project Settings → API** |
-| `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY` | Recommended | Generate once with `openssl rand -base64 32` |
 | `ADZUNA_APP_ID` | No | Adzuna developer account |
 | `ADZUNA_APP_KEY` | No | Adzuna developer account |
 | `ADZUNA_COUNTRIES` | No | `za,gb,us` |

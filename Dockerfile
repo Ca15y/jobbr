@@ -17,8 +17,8 @@ ENV NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
 ENV NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=${NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY}
 ENV NEXT_TELEMETRY_DISABLED=1
 
-RUN --mount=type=secret,id=next_server_actions_encryption_key,required=false \
-    sh -c 'if [ -f /run/secrets/next_server_actions_encryption_key ]; then export NEXT_SERVER_ACTIONS_ENCRYPTION_KEY="$(cat /run/secrets/next_server_actions_encryption_key)"; fi; npm run build'
+RUN --mount=type=secret,id=jobbr_env,required=false \
+    sh -c 'if [ -f /run/secrets/jobbr_env ]; then set -a; . /run/secrets/jobbr_env; set +a; fi; npm run build'
 
 FROM node:24-alpine AS runner
 WORKDIR /app

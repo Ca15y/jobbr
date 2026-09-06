@@ -33,13 +33,11 @@ Confirm that the account and IAM identity are the ones you intend to use. Keep t
 
 ```bash
 cp infra/aws/terraform.tfvars.example infra/aws/terraform.tfvars
-openssl rand -base64 32
 ```
 
 Edit the ignored `infra/aws/terraform.tfvars` file:
 
 - Copy the Supabase URL and publishable key from `.env.local`.
-- Paste the generated value into `next_server_actions_encryption_key`.
 - Leave `image_uri = ""` for the first apply.
 - Leave Adzuna values empty unless you use that feed.
 
@@ -61,13 +59,9 @@ If AWS reports that the GitHub OIDC provider already exists, find that provider'
 
 ## 4. Build and push the bootstrap image
 
-Load your local environment, capture the ECR URL, and authenticate Docker:
+Capture the ECR URL and authenticate Docker:
 
 ```bash
-set -a
-source .env.local
-set +a
-export NEXT_SERVER_ACTIONS_ENCRYPTION_KEY="YOUR_GENERATED_VALUE"
 export AWS_REGION="us-east-1"
 export JOBBR_ECR_URL="$(terraform -chdir=infra/aws output -raw ecr_repository_url)"
 
@@ -80,16 +74,15 @@ Build the exact `linux/amd64` architecture configured for Lambda and push it:
 ```bash
 docker build \
   --platform linux/amd64 \
-  --build-arg NEXT_PUBLIC_SUPABASE_URL \
-  --build-arg NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY \
-  --secret id=next_server_actions_encryption_key,env=NEXT_SERVER_ACTIONS_ENCRYPTION_KEY \
+  --provenance=false \
+  --secret id=jobbr_env,src=.env.local \
   --tag "$JOBBR_ECR_URL:bootstrap" \
   .
 
 docker push "$JOBBR_ECR_URL:bootstrap"
 ```
 
-Do not paste secret values directly into a Dockerfile or command argument. The BuildKit secret mount avoids persisting the server-actions key in an image layer.
+Do not paste values directly into a Dockerfile or command argument. The BuildKit secret mount reads `.env.local` only during the build; Docker does not copy that file into an image layer.
 
 ## 5. Create Lambda
 
@@ -124,8 +117,6 @@ Then open **Settings → Secrets and variables → Actions → Variables** and c
 | `AWS_DEPLOY_ROLE_ARN` | Terraform output `github_deploy_role_arn` |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase publishable key |
-
-Under **Actions → Secrets**, create `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY` with exactly the same generated value used by Terraform.
 
 Open **Actions → Deploy to AWS Lambda → Run workflow**. The workflow assumes the short-lived OIDC role, pushes a commit-tagged image, updates Lambda, and checks the login route.
 

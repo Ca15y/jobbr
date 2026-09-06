@@ -49,6 +49,6 @@ Keeping AWS deployment manual avoids consuming credits for every documentation e
 - Browser code receives only the Supabase publishable key.
 - Database policies, not key secrecy, protect each user's rows.
 - GitHub Actions requests a short-lived AWS credential through OIDC.
-- The AWS trust policy is restricted to `ca15y/jobbr`.
+- The AWS trust policy is restricted to the canonical, case-sensitive `Ca15y/jobbr` OIDC subject.
 - The deployment role can push only to the Jobbr ECR repository and update only the Jobbr Lambda function.
 - Terraform state and local environment files are ignored because they can contain deployment values.

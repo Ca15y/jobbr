@@ -1,5 +1,5 @@
 aws_region       = "us-east-1"
-github_owner     = "ca15y"
+github_owner     = "Ca15y"
 github_repository = "jobbr"
 
 # Leave empty for the first apply. Set this after pushing the first image.

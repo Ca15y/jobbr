@@ -13,7 +13,7 @@ variable "app_name" {
 variable "github_owner" {
   description = "GitHub account that owns the repository."
   type        = string
-  default     = "ca15y"
+  default     = "Ca15y"
 }
 
 variable "github_repository" {

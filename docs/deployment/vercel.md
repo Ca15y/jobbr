@@ -34,7 +34,19 @@ The two `NEXT_PUBLIC_` values are visible in browser code by design. Never subst
 5. Add these **Redirect URLs**:
    - `http://localhost:3000/auth/callback`
    - `https://YOUR_VERCEL_DOMAIN/auth/callback`
-6. Save, then request a magic link from the deployed `/login` page.
+6. Open **Authentication → Email Templates → Magic Link** and make the link target:
+
+   ```html
+   <a href="{{ .RedirectTo }}?token_hash={{ .TokenHash }}&type=email">
+     Sign in to Jobbr
+   </a>
+   ```
+
+   Jobbr verifies the token hash on the server and stores the resulting session in
+   cookies. `RedirectTo` preserves the Vercel, AWS, or local origin that requested
+   the link.
+7. Save, then request a new magic link from the deployed `/login` page. Previously
+   generated links still use the old template and cannot test this configuration.
 
 If you add a custom domain, add its `/auth/callback` URL to the same allow list before testing sign-in.
 

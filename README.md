@@ -54,7 +54,16 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-publishable-key
 ```
 
 4. Open **Authentication → URL Configuration**. Set the local redirect URL to `http://localhost:3000/auth/callback`.
-5. Restart `npm run dev`, request a sign-in link, and confirm that a new application persists after refresh.
+5. Open **Authentication → Email Templates → Magic Link** and point the link at
+   Jobbr's server-side verification route:
+
+   ```html
+   <a href="{{ .RedirectTo }}?token_hash={{ .TokenHash }}&type=email">
+     Sign in to Jobbr
+   </a>
+   ```
+
+6. Restart `npm run dev`, request a new sign-in link, and confirm that a new application persists after refresh.
 
 The publishable key is meant for browser use. Data privacy comes from the included database Row Level Security policies. Never expose a Supabase service-role key.
 

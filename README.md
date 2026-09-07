@@ -54,18 +54,14 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-publishable-key
 ```
 
 4. Open **Authentication → URL Configuration**. Set the local redirect URL to `http://localhost:3000/auth/callback`.
-5. Open **Authentication → Email Templates → Magic Link** and point the link at
-   Jobbr's server-side verification route:
-
-   ```html
-   <a href="{{ .RedirectTo }}?token_hash={{ .TokenHash }}&type=email">
-     Sign in to Jobbr
-   </a>
-   ```
-
-6. Restart `npm run dev`, request a new sign-in link, and confirm that a new application persists after refresh.
+5. Restart `npm run dev`, request a new sign-in link, and confirm that a new application persists after refresh.
 
 The publishable key is meant for browser use. Data privacy comes from the included database Row Level Security policies. Never expose a Supabase service-role key.
+
+Supabase's default email provider is intended for initial testing and has strict
+recipient and rate limits. GitHub OAuth is the simplest public sign-in option for a
+free deployment. Custom SMTP and a server-side token-hash email template are optional
+production enhancements documented in the [Vercel deployment guide](docs/deployment/vercel.md).
 
 ## Enable GitHub sign-in
 

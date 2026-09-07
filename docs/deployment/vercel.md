@@ -34,19 +34,24 @@ The two `NEXT_PUBLIC_` values are visible in browser code by design. Never subst
 5. Add these **Redirect URLs**:
    - `http://localhost:3000/auth/callback`
    - `https://YOUR_VERCEL_DOMAIN/auth/callback`
-6. Open **Authentication → Email Templates → Magic Link** and make the link target:
+6. Save, then request a new magic link from the deployed `/login` page.
 
-   ```html
-   <a href="{{ .RedirectTo }}?token_hash={{ .TokenHash }}&type=email">
-     Sign in to Jobbr
-   </a>
-   ```
+Supabase's default email provider is suitable for initial testing, but it has strict
+recipient and rate limits. A public deployment that offers email sign-in to users
+outside the Supabase project team needs a custom SMTP provider.
 
-   Jobbr verifies the token hash on the server and stores the resulting session in
-   cookies. `RedirectTo` preserves the Vercel, AWS, or local origin that requested
-   the link.
-7. Save, then request a new magic link from the deployed `/login` page. Previously
-   generated links still use the old template and cannot test this configuration.
+After configuring custom SMTP, you may optionally use Jobbr's server-side token-hash
+flow by setting the **Magic Link** template link to:
+
+```html
+<a href="{{ .RedirectTo }}?token_hash={{ .TokenHash }}&type=email">
+  Sign in to Jobbr
+</a>
+```
+
+Jobbr supports both Supabase's default PKCE callback and this optional token-hash
+callback. `RedirectTo` preserves the Vercel, AWS, or local origin that requested the
+link.
 
 If you add a custom domain, add its `/auth/callback` URL to the same allow list before testing sign-in.
 
